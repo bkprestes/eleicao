@@ -13,4 +13,6 @@ public interface EleicaoMapper {
 
     void update(Eleicao eleicao);
 
+    void delete(Long id);
+
 }

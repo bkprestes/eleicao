@@ -28,4 +28,9 @@ public class EleicaoRepository {
         return eleicaoMapper.selectById(eleicao.getId());
     }
 
+    public void delete(Long id) {
+        eleicaoMapper.delete(id);
+        
+    }
+
 }

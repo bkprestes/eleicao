@@ -28,4 +28,8 @@ public class EleicaoService {
         return eleicaoRepository.pesquisaPorId(id);
     }
 
+    public void delete(Long id) {
+        eleicaoRepository.delete(id);
+    }
+
 }

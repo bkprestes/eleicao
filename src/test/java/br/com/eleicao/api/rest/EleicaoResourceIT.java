@@ -3,6 +3,8 @@ package br.com.eleicao.api.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -96,5 +98,23 @@ public class EleicaoResourceIT {
         
         assertNotEquals(eleicaoFound.getNome(), eleicaoBefore.getNome());
         assertEquals(eleicaoFound.getNome(), "eleição 2");
+    }
+    
+    @Transactional
+    @Test
+    void delete_eleicaoById_statusOk() throws Exception {
+        Long idEleicao = 100001L;
+        Eleicao eleicaoBefore = new Eleicao();
+        eleicaoBefore.setId(idEleicao);
+        eleicaoBefore.setNome("uma eleicao");
+        LocalDate data = LocalDate.of(2020, 10, 10);
+        eleicaoBefore.setData(data);
+        eleicaoRepository.salvar(eleicaoBefore);
+        
+        mockMvc.perform(delete("/api/eleicoes/" + idEleicao)).andExpect(status().isOk());
+        
+        Eleicao eleicaoAfter = eleicaoRepository.pesquisaPorId(idEleicao);
+        assertNull(eleicaoAfter);
+        
     }
 }
