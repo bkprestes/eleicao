@@ -23,4 +23,9 @@ public class EleicaoRepository {
         return eleicaoMapper.selectById(id);
     }
 
+    public Eleicao update(Eleicao eleicao) {
+        eleicaoMapper.update(eleicao);
+        return eleicaoMapper.selectById(eleicao.getId());
+    }
+
 }

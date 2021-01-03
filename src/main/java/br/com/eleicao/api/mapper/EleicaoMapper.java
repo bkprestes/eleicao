@@ -11,4 +11,6 @@ public interface EleicaoMapper {
 
     Eleicao selectById(Long id);
 
+    void update(Eleicao eleicao);
+
 }

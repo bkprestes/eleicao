@@ -2,6 +2,7 @@ package br.com.eleicao.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.eleicao.api.domain.Eleicao;
 import br.com.eleicao.api.repository.EleicaoRepository;
@@ -15,6 +16,16 @@ public class EleicaoService {
     public Eleicao salvar(Eleicao eleicao) {
    
         return eleicaoRepository.salvar(eleicao);
+    }
+
+    public Eleicao pegarPorId(Long id) {
+        return eleicaoRepository.pesquisaPorId(id);
+    }
+
+    @Transactional
+    public Eleicao update(Long id, Eleicao eleicao) {
+        eleicaoRepository.update(eleicao);
+        return eleicaoRepository.pesquisaPorId(id);
     }
 
 }
