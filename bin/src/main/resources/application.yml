@@ -1,0 +1,18 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/eleicao
+    username: postgres
+    password: postgres
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  liquibase:
+    change-log: classpath:db/master.xml
+mybatis:
+  type-aliases-package: br.com.eleicao.api.domain
+  mapper-locations:
+  - classpath:mybatis/*.xml

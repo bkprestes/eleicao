@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="br.com.eleicao.api.mapper.EleicaoMapper">
+
+  <resultMap id="ResultEleicao" 
+               type="br.com.eleicao.api.domain.Eleicao">
+               
+        <id property="id" column="id"/>
+        <id property="nome" column="nome"/>
+        <id property="data" column="data"/>
+    </resultMap>
+    
+
+    <insert id="insert"
+    parameterType="Eleicao"
+    keyProperty="id"
+    useGeneratedKeys="true">
+        INSERT INTO eleicao.eleicao
+		(id, nome, "data")
+		VALUES(#{id}, #{nome}, #{data});
+		        
+    </insert>
+    
+    <select id="selectById"
+    parameterType="Long"
+    resultMap="ResultEleicao">
+    
+        SELECT id, nome, "data"
+        FROM eleicao.eleicao
+        WHERE id = #{id};
+    
+    
+    </select>
+    
+    <update id="update" keyProperty="id" parameterType="br.com.eleicao.api.domain.Eleicao">
+    
+        UPDATE eleicao.eleicao
+        SET nome = #{nome}, "data" = #{data}
+        WHERE id = #{id};
+    
+    </update>
+    
+    <delete id="delete" parameterType="Long">
+    
+        DELETE FROM eleicao.eleicao
+        WHERE id = #{id};   
+    
+    </delete>
+
+</mapper>
