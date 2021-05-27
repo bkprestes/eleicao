@@ -31,4 +31,12 @@
     
     </select>
     
+     <update id="update" keyProperty="id" parameterType="br.com.eleicao.api.domain.Pessoa">
+    
+        UPDATE eleicao.pessoa
+        SET nome = #{nome}, cpf = #{cpf}
+        WHERE id = #{id};
+    
+    </update>
+    
 </mapper>

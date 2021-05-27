@@ -1,9 +1,11 @@
 package br.com.eleicao.api.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -70,5 +72,27 @@ public class PessoaResourceIT {
         assertEquals(pessoa.getId(), pessoaFound.getId());
         assertEquals(pessoa.getNome(), pessoaFound.getNome());
         assertEquals(pessoa.getCpf(), pessoaFound.getCpf());
+    }
+    
+    @Transactional
+    @Test
+    void update_pessoaById_statusOk() throws Exception {
+        Long idPessoa = 100001L;
+        Pessoa pessoaBefore = new Pessoa();
+        pessoaBefore.setId(idPessoa);
+        pessoaBefore.setNome("Pablo");
+        pessoaBefore.setCpf("123.456.789-00");
+        pessoaRepository.salvar(pessoaBefore);
+        
+        Pessoa pessoaAfter = pessoaRepository.pesquisaPorId(idPessoa);
+        pessoaAfter.setNome("Pablo Ricardo");
+        
+        MockHttpServletResponse response = mockMvc.perform(put("/api/pessoa/" + idPessoa)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonHelper.toJson(pessoaAfter))).andExpect(status().isOk()).andReturn().getResponse();
+        Pessoa pessoaFound = JsonHelper.toObject(response.getContentAsByteArray(), Pessoa.class);
+        
+        assertNotEquals(pessoaFound.getNome(), pessoaBefore.getNome());
+        assertEquals(pessoaFound.getNome(), "Pablo Ricardo");
     }
 }

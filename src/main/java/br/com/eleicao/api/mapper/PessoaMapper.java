@@ -10,4 +10,6 @@ public interface PessoaMapper {
 	public void insert(Pessoa pessoa);
 
 	public Pessoa selectById(Long id);
+
+	public void update(Pessoa pessoa);
 }

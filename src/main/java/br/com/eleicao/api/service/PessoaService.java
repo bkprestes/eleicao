@@ -2,6 +2,7 @@ package br.com.eleicao.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.eleicao.api.domain.Pessoa;
 import br.com.eleicao.api.repository.PessoaRepository;
@@ -18,6 +19,12 @@ public class PessoaService {
 
 	public Pessoa pegarPorId(Long id) {
 		return pessoaRepository.pesquisaPorId(id);
+	}
+
+	@Transactional
+	public Pessoa update(Long id, Pessoa pessoa) {
+		pessoaRepository.update(pessoa);
+        return pessoaRepository.pesquisaPorId(id);
 	}
 
 }

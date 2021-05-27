@@ -22,4 +22,10 @@ public class PessoaRepository {
 	public Pessoa pesquisaPorId(Long id) {
 		return pessoaMapper.selectById(id);
 	}
+
+	public Pessoa update(Pessoa pessoa) {
+		pessoaMapper.update(pessoa);
+        return pessoaMapper.selectById(pessoa.getId());
+		
+	}
 }
