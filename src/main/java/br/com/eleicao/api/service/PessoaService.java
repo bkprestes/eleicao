@@ -16,4 +16,8 @@ public class PessoaService {
 		return pessoaRepository.salvar(pessoa);
 	}
 
+	public Pessoa pegarPorId(Long id) {
+		return pessoaRepository.pesquisaPorId(id);
+	}
+
 }

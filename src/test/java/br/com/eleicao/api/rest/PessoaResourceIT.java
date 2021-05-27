@@ -2,8 +2,11 @@ package br.com.eleicao.api.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.eleicao.api.domain.Eleicao;
 import br.com.eleicao.api.domain.Pessoa;
 import br.com.eleicao.api.helper.JsonHelper;
 import br.com.eleicao.api.repository.PessoaRepository;
@@ -48,5 +52,23 @@ public class PessoaResourceIT {
         Pessoa pessoaPersistida = pessoaRepository.pesquisaPorId(pessoaCriada.getId());
         assertEquals(pessoa.getNome(), pessoaPersistida.getNome());
         assertEquals(pessoa.getCpf(), pessoaPersistida.getCpf());
+    }
+    
+    @Transactional
+    @Test
+    void get_byId_ok() throws Exception {
+        Long idPessoa = 100001L;
+        Pessoa pessoa = new Pessoa();
+        pessoa.setId(idPessoa);
+        pessoa.setNome("uma eleicao");
+        pessoa.setCpf("123.456.789-00");
+        pessoaRepository.salvar(pessoa);
+        
+        MockHttpServletResponse response = mockMvc.perform(get("/api/pessoa/" + idPessoa)).andExpect(status().isOk()).andReturn().getResponse();
+        Pessoa pessoaFound = JsonHelper.toObject(response.getContentAsByteArray(), Pessoa.class);
+        
+        assertEquals(pessoa.getId(), pessoaFound.getId());
+        assertEquals(pessoa.getNome(), pessoaFound.getNome());
+        assertEquals(pessoa.getCpf(), pessoaFound.getCpf());
     }
 }
