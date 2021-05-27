@@ -3,6 +3,8 @@ package br.com.eleicao.api.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -94,5 +96,22 @@ public class PessoaResourceIT {
         
         assertNotEquals(pessoaFound.getNome(), pessoaBefore.getNome());
         assertEquals(pessoaFound.getNome(), "Pablo Ricardo");
+    }
+    
+    @Transactional
+    @Test
+    void delete_pessoaById_statusOk() throws Exception {
+        Long idPessoa = 100001L;
+        Pessoa pessoaBefore = new Pessoa();
+        pessoaBefore.setId(idPessoa);
+        pessoaBefore.setNome("Rebeca");
+        pessoaBefore.setCpf("123.456.789-00");
+        pessoaRepository.salvar(pessoaBefore);
+        
+        mockMvc.perform(delete("/api/pessoa/" + idPessoa)).andExpect(status().isOk());
+        
+        Pessoa pessoaAfter = pessoaRepository.pesquisaPorId(idPessoa);
+        assertNull(pessoaAfter);
+        
     }
 }

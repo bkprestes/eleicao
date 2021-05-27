@@ -12,4 +12,6 @@ public interface PessoaMapper {
 	public Pessoa selectById(Long id);
 
 	public void update(Pessoa pessoa);
+
+	public void delete(Long id);
 }

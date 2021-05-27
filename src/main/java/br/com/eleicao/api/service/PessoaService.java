@@ -27,4 +27,8 @@ public class PessoaService {
         return pessoaRepository.pesquisaPorId(id);
 	}
 
+	public void delete(Long id) {
+		pessoaRepository.delete(id);		
+	}
+
 }

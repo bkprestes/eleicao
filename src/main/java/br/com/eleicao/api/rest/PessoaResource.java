@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,12 @@ public class PessoaResource {
 		Pessoa pessoaUpdated = pessoaService.update(id, pessoa);
         
         return ResponseEntity.ok().body(pessoaUpdated);
+    }
+	
+	@DeleteMapping("/pessoa/{id}")
+    public void removerPessoa(@PathVariable Long id) throws URISyntaxException {
+                 
+		pessoaService.delete(id);
+        
     } 
 }

@@ -28,4 +28,9 @@ public class PessoaRepository {
         return pessoaMapper.selectById(pessoa.getId());
 		
 	}
+
+	public void delete(Long id) {
+		pessoaMapper.delete(id);
+		
+	}
 }
