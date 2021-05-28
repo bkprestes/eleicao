@@ -1,5 +1,7 @@
 package br.com.eleicao.api.repository;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,5 +34,9 @@ public class EleicaoRepository {
         eleicaoMapper.delete(id);
         
     }
+
+	public ArrayList<Eleicao> listarEleicoes() {
+		return eleicaoMapper.listarEleicoes();
+	}
 
 }

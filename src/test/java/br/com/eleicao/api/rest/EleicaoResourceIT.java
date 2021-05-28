@@ -40,7 +40,7 @@ public class EleicaoResourceIT {
     @Test
     void create_eleicao_StatusCreated() throws Exception {
         Eleicao eleicao = new Eleicao();
-        eleicao.setId(100002L);
+        eleicao.setId(100004L);
         eleicao.setNome("Cipa");
         eleicao.setData(LocalDate.parse("2020-10-02"));
         
@@ -62,34 +62,38 @@ public class EleicaoResourceIT {
     @Test
     void get_byId_ok() throws Exception {
         Long idEleicao = 100001L;
-        Eleicao eleicao = new Eleicao();
-        eleicao.setId(idEleicao);
-        eleicao.setNome("uma eleicao");
-        LocalDate data = LocalDate.of(2020, 10, 10);
-        eleicao.setData(data);
-        eleicaoRepository.salvar(eleicao);
         
         MockHttpServletResponse response = mockMvc.perform(get("/api/eleicoes/" + idEleicao)).andExpect(status().isOk()).andReturn().getResponse();
         Eleicao eleicaoFound = JsonHelper.toObject(response.getContentAsByteArray(), Eleicao.class);
         
-        assertEquals(eleicao.getId(), eleicaoFound.getId());
-        assertEquals(eleicao.getNome(), eleicaoFound.getNome());
-        assertEquals(eleicao.getData(), eleicaoFound.getData());
+        assertEquals(100001, eleicaoFound.getId());
+        assertEquals("Uma eleição 1", eleicaoFound.getNome());
+        assertEquals("2020-12-12", eleicaoFound.getData().toString());
+    }
+    
+    @Transactional
+    @Test
+    void get_allEleicoes_ok() throws Exception {
+     
+        
+        MockHttpServletResponse response = mockMvc.perform(get("/api/eleicoes")).andExpect(status().isOk()).andReturn().getResponse();
+        Eleicao[] eleicaoFound = JsonHelper.toObject(response.getContentAsByteArray(), Eleicao[].class);
+        
+        assertEquals(eleicaoFound[0].getId(), 100001L);
+        assertEquals(eleicaoFound[0].getNome(), "Uma eleição 1");
+        assertEquals(eleicaoFound[0].getData().toString(), "2020-12-12");
     }
     
     @Transactional
     @Test
     void update_eleicaoById_statusOk() throws Exception {
         Long idEleicao = 100001L;
-        Eleicao eleicaoBefore = new Eleicao();
-        eleicaoBefore.setId(idEleicao);
-        eleicaoBefore.setNome("uma eleicao");
-        LocalDate data = LocalDate.of(2020, 10, 10);
-        eleicaoBefore.setData(data);
-        eleicaoRepository.salvar(eleicaoBefore);
+        Eleicao eleicaoBefore = eleicaoRepository.pesquisaPorId(idEleicao);
         
-        Eleicao eleicaoAfter = eleicaoRepository.pesquisaPorId(idEleicao);
+        Eleicao eleicaoAfter = new Eleicao();
+        eleicaoAfter.setId(idEleicao);
         eleicaoAfter.setNome("eleição 2");
+        eleicaoAfter.setData(eleicaoBefore.getData());
         
         MockHttpServletResponse response = mockMvc.perform(put("/api/eleicoes/" + idEleicao)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,18 +102,13 @@ public class EleicaoResourceIT {
         
         assertNotEquals(eleicaoFound.getNome(), eleicaoBefore.getNome());
         assertEquals(eleicaoFound.getNome(), "eleição 2");
+        System.out.println(eleicaoFound.getNome()+" "+eleicaoBefore.getNome());
     }
     
     @Transactional
     @Test
     void delete_eleicaoById_statusOk() throws Exception {
         Long idEleicao = 100001L;
-        Eleicao eleicaoBefore = new Eleicao();
-        eleicaoBefore.setId(idEleicao);
-        eleicaoBefore.setNome("uma eleicao");
-        LocalDate data = LocalDate.of(2020, 10, 10);
-        eleicaoBefore.setData(data);
-        eleicaoRepository.salvar(eleicaoBefore);
         
         mockMvc.perform(delete("/api/eleicoes/" + idEleicao)).andExpect(status().isOk());
         

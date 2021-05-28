@@ -1,7 +1,9 @@
 package br.com.eleicao.api.rest;
 
+import java.awt.List;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,14 @@ public class EleicaoResource {
     
     @Autowired
     private EleicaoService eleicaoService;
+    
+    @GetMapping("/eleicoes")
+    public ResponseEntity<ArrayList<Eleicao>> listarEleicoes() throws URISyntaxException {
+        
+    	ArrayList<Eleicao> eleicoes = eleicaoService.listarEleicoes();
+        
+        return ResponseEntity.ok().body(eleicoes);
+    } 
 
     @PostMapping("/eleicoes")
     public ResponseEntity<Eleicao> criarEleicao(@RequestBody Eleicao eleicao) throws URISyntaxException {

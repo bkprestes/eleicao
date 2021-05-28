@@ -32,6 +32,13 @@
     
     </select>
     
+    <select id="listarEleicoes" resultMap="ResultEleicao">
+    
+    	SELECT id, nome, "data"
+        FROM eleicao.eleicao;
+    
+    </select>
+    
     <update id="update" keyProperty="id" parameterType="br.com.eleicao.api.domain.Eleicao">
     
         UPDATE eleicao.eleicao
