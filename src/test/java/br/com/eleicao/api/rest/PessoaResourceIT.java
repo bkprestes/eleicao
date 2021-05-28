@@ -40,9 +40,9 @@ public class PessoaResourceIT {
     @Test
     void create_pessoa_StatusCreated() throws Exception {
     	Pessoa pessoa = new Pessoa();
-    	pessoa.setId(100001L);
-    	pessoa.setNome("Rebeca Andrade");
-    	pessoa.setCpf("123456789-00");
+    	pessoa.setId(100004L);
+    	pessoa.setNome("Maria Fatima");
+    	pessoa.setCpf("111.111.222-00");
         
         MockHttpServletResponse response = mockMvc.perform(
                 post("/api/pessoa")
@@ -62,32 +62,25 @@ public class PessoaResourceIT {
     @Test
     void get_byId_ok() throws Exception {
         Long idPessoa = 100001L;
-        Pessoa pessoa = new Pessoa();
-        pessoa.setId(idPessoa);
-        pessoa.setNome("uma eleicao");
-        pessoa.setCpf("123.456.789-00");
-        pessoaRepository.salvar(pessoa);
         
         MockHttpServletResponse response = mockMvc.perform(get("/api/pessoa/" + idPessoa)).andExpect(status().isOk()).andReturn().getResponse();
         Pessoa pessoaFound = JsonHelper.toObject(response.getContentAsByteArray(), Pessoa.class);
         
-        assertEquals(pessoa.getId(), pessoaFound.getId());
-        assertEquals(pessoa.getNome(), pessoaFound.getNome());
-        assertEquals(pessoa.getCpf(), pessoaFound.getCpf());
+        assertEquals(idPessoa, pessoaFound.getId());
+        assertEquals("Pablo Ricardo", pessoaFound.getNome());
+        assertEquals("123.456.789-00", pessoaFound.getCpf());
     }
     
     @Transactional
     @Test
     void update_pessoaById_statusOk() throws Exception {
         Long idPessoa = 100001L;
-        Pessoa pessoaBefore = new Pessoa();
-        pessoaBefore.setId(idPessoa);
-        pessoaBefore.setNome("Pablo");
-        pessoaBefore.setCpf("123.456.789-00");
-        pessoaRepository.salvar(pessoaBefore);
+        Pessoa pessoaBefore = pessoaRepository.pesquisaPorId(idPessoa);
         
-        Pessoa pessoaAfter = pessoaRepository.pesquisaPorId(idPessoa);
-        pessoaAfter.setNome("Pablo Ricardo");
+        Pessoa pessoaAfter = new Pessoa();
+        pessoaAfter.setId(idPessoa);
+        pessoaAfter.setNome("Rose");
+        pessoaAfter.setCpf(pessoaBefore.getCpf());
         
         MockHttpServletResponse response = mockMvc.perform(put("/api/pessoa/" + idPessoa)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -95,18 +88,13 @@ public class PessoaResourceIT {
         Pessoa pessoaFound = JsonHelper.toObject(response.getContentAsByteArray(), Pessoa.class);
         
         assertNotEquals(pessoaFound.getNome(), pessoaBefore.getNome());
-        assertEquals(pessoaFound.getNome(), "Pablo Ricardo");
+        assertEquals(pessoaFound.getNome(), "Rose");
     }
     
     @Transactional
     @Test
     void delete_pessoaById_statusOk() throws Exception {
-        Long idPessoa = 100001L;
-        Pessoa pessoaBefore = new Pessoa();
-        pessoaBefore.setId(idPessoa);
-        pessoaBefore.setNome("Rebeca");
-        pessoaBefore.setCpf("123.456.789-00");
-        pessoaRepository.salvar(pessoaBefore);
+        Long idPessoa = 100003L;
         
         mockMvc.perform(delete("/api/pessoa/" + idPessoa)).andExpect(status().isOk());
         
