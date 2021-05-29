@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.eleicao.api.domain.Eleicao;
 import br.com.eleicao.api.domain.Pessoa;
+import br.com.eleicao.api.dto.PessoaEdition;
 import br.com.eleicao.api.service.PessoaService;
 
 @RestController
@@ -40,7 +40,7 @@ public class PessoaResource {
     }
 	
 	@PutMapping("/pessoa/{id}")
-    public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) throws URISyntaxException {
+    public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody PessoaEdition pessoa) throws URISyntaxException {
                  
 		Pessoa pessoaUpdated = pessoaService.update(id, pessoa);
         

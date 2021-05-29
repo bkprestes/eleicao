@@ -34,7 +34,7 @@
     <update id="update" keyProperty="id" parameterType="br.com.eleicao.api.domain.Pessoa">
     
         UPDATE eleicao.pessoa
-        SET nome = #{nome}, cpf = #{cpf}
+        SET nome = #{nome}
         WHERE id = #{id};
     
     </update>

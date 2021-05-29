@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,8 +19,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.eleicao.api.domain.Eleicao;
 import br.com.eleicao.api.domain.Pessoa;
+import br.com.eleicao.api.dto.PessoaEdition;
 import br.com.eleicao.api.helper.JsonHelper;
 import br.com.eleicao.api.repository.PessoaRepository;
 
@@ -77,10 +75,8 @@ public class PessoaResourceIT {
         Long idPessoa = 100001L;
         Pessoa pessoaBefore = pessoaRepository.pesquisaPorId(idPessoa);
         
-        Pessoa pessoaAfter = new Pessoa();
-        pessoaAfter.setId(idPessoa);
+        PessoaEdition pessoaAfter = new PessoaEdition();
         pessoaAfter.setNome("Rose");
-        pessoaAfter.setCpf(pessoaBefore.getCpf());
         
         MockHttpServletResponse response = mockMvc.perform(put("/api/pessoa/" + idPessoa)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,6 +85,7 @@ public class PessoaResourceIT {
         
         assertNotEquals(pessoaFound.getNome(), pessoaBefore.getNome());
         assertEquals(pessoaFound.getNome(), "Rose");
+        assertEquals(pessoaFound.getCpf(), "123.456.789-00");
     }
     
     @Transactional
